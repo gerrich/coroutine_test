@@ -10,11 +10,16 @@ CXXFLAGS=$(INCLUDE_FLAGS) $(LINK_FLAGS) -g -O0
 
 BIN=bin
 
-all:
-	mkdir -p $(BIN)
+all: $(BIN) $(BIN)/xrange $(BIN)/coro_test $(BIN)/server
+$(BIN):
+	if test -d $(BIN); then echo "$(BIN) exists"; else mkdir -p $(BIN); fi
+$(BIN)/xrange:
 	$(CC) $(CXXFLAGS) -o $(BIN)/xrange xrange.cpp
+$(BIN)/coro_test:
 	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/coro_test coro_test.cpp
+$(BIN)/server:
 	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/server server.cpp
+#echo_server:  
 #	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/echo_server echo_server.cpp
 
 clear:
