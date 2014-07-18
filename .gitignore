@@ -3,3 +3,7 @@
 
 bin
 *.dSYM
+CMakeFiles
+CmakeCache.txt
+makefile
+cmake_install.cmake

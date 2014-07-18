@@ -6,19 +6,31 @@ BOOST_SFX=-mt
 LINK_FLAGS=-L/opt/local/lib -lboost_context$(BOOST_SFX) -lboost_coroutine$(BOOST_SFX) -lboost_system$(BOOST_SFX)
 #LINK_FLAGS=-L/Users/gerich/coding/boost_1_55_0/stage/lib -lboost_context -lboost_coroutine -lboost_system
 ASIO_LINK_FLAGS=-lboost_system$(BOOST_SFX) -lboost_thread$(BOOST_SFX) -lboost_date_time$(BOOST_SFX) -lboost_regex$(BOOST_SFX) -lboost_serialization$(BOOST_SFX)
+THREAD_LINK_FLAGS=-lboost_thread$(BOOST_SFX)
 CXXFLAGS=$(INCLUDE_FLAGS) $(LINK_FLAGS) -g -O0
+
+CC11=g++ -std=c++11
 
 BIN=bin
 
-all: $(BIN) $(BIN)/xrange $(BIN)/coro_test $(BIN)/server
-$(BIN):
+all: $(BIN) $(BIN)/future_test $(BIN)/xrange $(BIN)/coro_test $(BIN)/server $(BIN)/daytime_client $(BIN)/daytime_client_future $(BIN)/daytime_client_coro
+$(BIN): 
 	if test -d $(BIN); then echo "$(BIN) exists"; else mkdir -p $(BIN); fi
-$(BIN)/xrange:
+$(BIN)/future_test: future_test.cpp
+	$(CC) $(CXXFLAGS) $(THREAD_LINK_FLAGS) -o $(BIN)/future_test future_test.cpp
+$(BIN)/xrange: xrange.cpp
 	$(CC) $(CXXFLAGS) -o $(BIN)/xrange xrange.cpp
-$(BIN)/coro_test:
+$(BIN)/coro_test: coro_test.cpp
 	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/coro_test coro_test.cpp
-$(BIN)/server:
+$(BIN)/server: server.cpp
 	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/server server.cpp
+$(BIN)/daytime_client: daytime_client.cpp
+	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/daytime_client daytime_client.cpp
+$(BIN)/daytime_client_future: daytime_client_future.cpp
+	$(CC11) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/daytime_client_future daytime_client_future.cpp
+$(BIN)/daytime_client_coro: daytime_client_coro.cpp
+	$(CC11) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/daytime_client_coro daytime_client_coro.cpp
+
 #echo_server:  
 #	$(CC) $(CXXFLAGS) $(ASIO_LINK_FLAGS) -o $(BIN)/echo_server echo_server.cpp
 
